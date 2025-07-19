@@ -1,4 +1,5 @@
 {{- if .Values.enabled }}{{- if .Values.appProject.enabled }}
+{{- $defaultns := .Values.namespace.name | quote }}
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -6,31 +7,25 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
     # App Project annotations
-    {{- range $key, $value := .Values.appProject.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.appProject.annotations }}
+    {{- toYaml .Values.appProject.annotations | nindent 4 }}
     {{- end }}
     # Global annotations
     {{- if .Values.global.annotations }}
-    {{- range $key, $value := .Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- toYaml .Values.global.annotations | nindent 4 }}
     {{- end }}
     {{-  if .Values.appProject.hooked }}
-    # Helm hook annotations to prevent deletion
-    helm.sh/hook: pre-install,post-delete
-    helm.sh/hook-weight: "-11"
-    helm.sh/hook-delete-policy: hook-failed
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookFailed
     {{- end }}
   labels:
     # App Project labels
-    {{- range $key, $value := .Values.appProject.labels }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.appProject.labels }}
+    {{- toYaml .Values.appProject.labels | nindent 4 }}
     {{- end }}
     # Global labels
     {{- if .Values.global.labels }}
-    {{- range $key, $value := .Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
+    {{- toYaml .Values.global.labels | nindent 4 }}
     {{- end }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -51,12 +46,9 @@ spec:
   destinations:
     {{- if .Values.appProject.destinations }}
     {{- range .Values.appProject.destinations }}
-    - namespace: {{ .Values.namespace | quote }}
-      server: {{ .Values.appProject.server | quote }}
-    {{- else }}
-    # Default destination is the current namespace on the local cluster
-    - namespace: {{ .Values.namespace | quote }}
-      server: https://kubernetes.default.svc
+    - namespace: {{ .Values.namespace | default $defaultns | quote }}
+      server: {{ .Values.appProject.server | default "https://kubernetes.default.svc" | quote }}
+    {{- end }}
     {{- end }}
   clusterResourceWhitelist:
     {{- if .Values.appProject.resourceWhitelist }}
@@ -90,5 +82,4 @@ spec:
     warn: {{ .Values.appProject.monitoring.warnOrphaned }}
   {{- end }}
   {{- end }}
-{{- end }}
-{{- end }}
+{{- end }}{{- end }}

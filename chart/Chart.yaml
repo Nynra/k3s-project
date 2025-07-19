@@ -2,4 +2,4 @@ apiVersion: v2
 name: projectApp
 description: A Helm chart that deploys a project application in a K3s cluster.
 type: application
-version: "0.0.2"
+version: "0.0.3"

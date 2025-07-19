@@ -2,30 +2,24 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: {{ .Values.namespace.name | quote }}
+  name: {{ .Values.namespace.name | default .Chart.Name | quote }}
   labels: 
     # Namespace labels
     {{- if .Values.namespace.labels }}
-    {{- range $key, $value := .Values.namespace.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- toYaml .Values.namespace.labels | nindent 4 }}
     {{- end }}
     # Global labels
     {{- if .Values.global.labels }}
-    {{- range $key, $value := .Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- toYaml .Values.global.labels | nindent 4 }}
     {{- end }}
   annotations:
     # Namespace annotations
-    {{- range $key, $value := .Values.namespace.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- if .Values.namespace.annotations }}
+    {{- toYaml .Values.namespace.annotations | nindent 4 }}
     {{- end }}
     # Global annotations
     {{- if .Values.global.annotations }}
-    {{- range $key, $value := .Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- toYaml .Values.global.annotations | nindent 4 }}
     {{- end }}
     # Argocd wave
     argocd.argoproj.io/sync-wave: "-10"

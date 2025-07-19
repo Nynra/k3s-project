@@ -17,24 +17,20 @@ metadata:
     app.kubernetes.io/name: "{{ .id }}-rolebinding"
     # Rbac labels
     {{- if $.Values.rbac.labels }}
-    {{- range $key, $value := $.Values.rbac.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.labels | nindent 4 }}
+    {{- end }}
     # Global labels
     {{- if $.Values.global.labels }}
-    {{- range $key, $value := $.Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
+    {{- toYaml $.Values.global.labels | nindent 4 }}
     {{- end }}{{- end }}
   annotations:
     # Rbac annotations
     {{- if $.Values.rbac.annotations }}
-    {{- range $key, $value := $.Values.rbac.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.annotations | nindent 4 }}
+    {{- end }}
     # Global annotations
     {{- if $.Values.global.annotations }}
-    {{- range $key, $value := $.Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- toYaml $.Values.global.annotations | nindent 4 }}
     {{- end }}{{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -55,33 +51,29 @@ subjects:
 kind: {{ $cscope | quote }}
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: "{{ .id }}"
+  name: {{ .id | quote }}
   {{- if ne .type "cluster" }}
-  namespace: {{- .namespace }}
+  namespace: {{- .namespace | quote }}
   {{- end }}
   labels:
     app.kubernetes.io/name: "{{ .id }}-rolebinding"
     # Rbac labels
     {{- if $.Values.rbac.labels }}
-    {{- range $key, $value := $.Values.rbac.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.labels | nindent 4 }}
+    {{- end }}
     # Global labels
     {{- if $.Values.global.labels }}
-    {{- range $key, $value := $.Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.global.labels | nindent 4 }}
+    {{- end }}
   annotations:
     # Rbac annotations
     {{- if $.Values.rbac.annotations }}
-    {{- range $key, $value := $.Values.rbac.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.annotations | nindent 4 }}
+    {{- end }}
     # Global annotations
     {{- if $.Values.global.annotations }}
-    {{- range $key, $value := $.Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.global.annotations | nindent 4 }}
+    {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -109,24 +101,20 @@ metadata:
     app.kubernetes.io/name: "{{ .id }}-rolebinding"
     # Rbac labels
     {{- if $.Values.rbac.labels }}
-    {{- range $key, $value := $.Values.rbac.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.labels | nindent 4 }}
+    {{- end }}
     # Global labels
     {{- if $.Values.global.labels }}
-    {{- range $key, $value := $.Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.global.labels | nindent 4 }}
+    {{- end }}
   annotations:
     # Rbac annotations
     {{- if $.Values.rbac.annotations }}
-    {{- range $key, $value := $.Values.rbac.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- toYaml $.Values.rbac.annotations | nindent 4 }}
     {{- end }}{{- end }}
     # Global annotations
     {{- if $.Values.global.annotations }}
-    {{- range $key, $value := $.Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
+    {{- toYaml $.Values.global.annotations | nindent 4 }}
     {{- end }}{{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io

@@ -266,38 +266,66 @@ serviceAccounts:
 
 externalSecrets:
   enabled: false
+  enableCertificates: true
+  enableSecrets: true
 
   # Labels and annotation to add to all external secrets
   annotations: {}
   labels: {}
 
-  # List of external secrets to create
-  list: []
-  # # Example external secret
+  # Labels and annotation to add to all certificates
+  certAnnotations: {}
+  certLabels: {}
+
+  # Labels and annotation to add to all secrets
+  secretAnnotations: {}
+  secretLabels: {}
+
+  # List of certificates to create
+  certificates: []
+  # # Example external secret with all fields
   # - name: my-external-secret
-  #   # Namespace where the secret will be created (default is project namespace)
-  #   namespace: default
-  #   # The secret data to create
-  #   data:
-  #     - key: my-key
-  #       name: my-secret-name
-  #       type: Opaque
+  #   namespace: k3s-test-namespace
+  #   annotations: {}
+  #   labels: {}
+  #   remoteSecret:
+  #     name: my-secret-name
+  #     crtField: tls_crt
+  #     keyField: tls_key
+  #   secretStore:
+  #     kind: SecretStore
+  #     name: kubernetes-secret-store
+  # # Example external secret with manditory fields only
+  # - name: my-external-secret
+  #   remoteSecret:
+  #     name: my-secret-name
+  #   secretStore:
+  #     name: kubernetes-secret-store
+  #  # Or
+  # - name: my-external-secret
+  #   remoteSecret.name: my-secret-name
+  #   secretStore.name: kubernetes-secret-store
 
-externalCertificates:
-  enabled: false
-
-  # Labels and annotation to add to all external certificates
-  annotations: {}
-  labels: {}
-
-  # List of external certificates to create
-  list: []
-  # # Example external certificate
-  # - name: my-external-certificate
-  #   # Namespace where the certificate will be created (default is project namespace)
-  #   namespace: default
-  #   # The certificate data to create
-  #   data:
-  #     - key: my-key
-  #       name: my-certificate-name
-  #       type: Opaque
+  # List of secrets to create
+  secrets: []
+  # # Example external secret with all fields
+  # - name: my-external-secret
+  #   namespace: k3s-test-namespace
+  #   annotations: {}
+  #   labels: {}
+  #   remoteSecretName: my-secret-name
+  #   fieldMappings:
+  #     # The field name in the remote secret
+  #     - remoteField: my_secret_field
+  #       # The secret key in the Kubernetes secret
+  #       secretKey: my_secret_key
+  #   secretStore:
+  #     kind: SecretStore
+  #     name: kubernetes-secret-store
+  # # Example external secret with manditory fields only
+  # - name: my-external-secret
+  #   remoteSecretName: my-secret-name
+  #   fieldMappings:
+  #     - remoteField: my_secret_field
+  #       secretKey: my_secret_key
+  #   secretStore.name: kubernetes-secret-store

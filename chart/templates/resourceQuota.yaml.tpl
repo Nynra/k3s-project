@@ -3,25 +3,25 @@ kind: ResourceQuota
 apiVersion: v1
 metadata:
   name: "{{- .Values.namespace.name | default .Chart.Name -}}-quotas"
-  namespace: "{{- .Values.namespace.name | default .Chart.Name -}}"
+  namespace: {{- .Values.namespace.name | default .Chart.Name | quote }}
   labels:
+    # ResourceQuota labels
     {{- if .Values.quotas.labels }}
-    {{- range $key, $value := .Values.quotas.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml .Values.quotas.labels | nindent 4 }}
+    {{- end }}
+    # Global labels
     {{- if .Values.global.labels }}
-    {{- range $key, $value := .Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml .Values.global.labels | nindent 4 }}
+    {{- end }}
   annotations:
+    # ResourceQuota annotations
     {{- if .Values.quotas.annotations }}
-    {{- range $key, $value := .Values.quotas.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml .Values.quotas.annotations | nindent 4 }}
+    {{- end }}
+    # Global annotations
     {{- if .Values.global.annotations }}
-    {{- range $key, $value := .Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml .Values.global.annotations | nindent 4 }}
+    {{- end }}
 spec: 
   {{- .Values.quotas.rules | nindent 2 }}
 {{- end }}{{- end }}{{- end }}

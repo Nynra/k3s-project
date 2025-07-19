@@ -3,18 +3,26 @@ kind: LimitRange
 apiVersion: v1
 metadata:
   name: "{{- .Values.appProject.name | default .Chart.Name -}}-limits"
-  namespace: "{{- .Values.namespace.name | default .Chart.Name -}}"
+  namespace: {{- .Values.namespace.name | default .Chart.Name | quote }}
   labels:
-    {{- include "project.labels" . | nindent 4 }}
-    app.kubernetes.io/name: "{{- include "startx.appName" . -}}-{{- include "startx.appVersion" . -}}-limits"
-    {{- if .Values.limits.additionalLabels }}
-    {{- .Values.limits.additionalLabels | trim | nindent 4 }}
-    {{- end}}
+    app.kubernetes.io/name: "{{- .Values.appProject.name | default .Chart.Name -}}-limits"
+    # LimitRange labels
+    {{- if .Values.limits.labels }}
+    {{- toYaml .Values.limits.labels | nindent 4 }}
+    {{- end }}
+    # Global labels
+    {{- if .Values.global.labels }}
+    {{- toYaml .Values.global.labels | nindent 4 }}
+    {{- end }}
   annotations:
-    {{- include "project.annotations" . | nindent 4 }}
-    {{- if .Values.limits.additionalAnnotations }}
-    {{- .Values.limits.additionalAnnotations | trim | nindent 4 }}
-    {{- end}}
+    # LimitRange annotations
+    {{- if .Values.limits.annotations }}
+    {{- toYaml .Values.limits.annotations | nindent 4 }}
+    {{- end }}
+    # Global annotations
+    {{- if .Values.global.annotations }}
+    {{- toYaml .Values.global.annotations | nindent 4 }}
+    {{- end }}
 spec: 
   {{- .Values.limits.rules | nindent 2 }}
 {{- end }}{{- end }}{{- end }}

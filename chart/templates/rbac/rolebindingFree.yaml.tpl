@@ -13,32 +13,28 @@
 kind: {{ $cbscope | quote }}
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: "{{ .id }}"
+  name: {{ .id | quote }}
   {{- if ne .type "cluster" }}
-  namespace: "{{- .namespace | default $.Values.namespace.name | default .Chart.Name -}}"
+  namespace: {{- .namespace | default $.Values.namespace.name | quote }}
   {{- end }}
   labels:
     app.kubernetes.io/name: "{{ .id }}-role"
     # Rbac labels
     {{- if $.Values.rbac.labels }}
-    {{- range $key, $value := $.Values.rbac.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.labels | nindent 4 }}
+    {{- end }}
     # Global labels
     {{- if $.Values.global.labels }}
-    {{- range $key, $value := $.Values.global.labels }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.global.labels | nindent 4 }}
+    {{- end }}
   annotations:
     {{- if $.Values.rbac.annotations }}
-    {{- range $key, $value := $.Values.rbac.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.rbac.annotations | nindent 4 }}
+    {{- end }}
     # Global annotations
     {{- if $.Values.global.annotations }}
-    {{- range $key, $value := $.Values.global.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{- end }}{{- end }}
+    {{- toYaml $.Values.global.annotations | nindent 4 }}
+    {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: {{ $cscope | quote }}
