@@ -156,6 +156,11 @@ rbac:
 networkpolicy: 
   # Enable NetworkPolicy default for this project
   enabled: false
+
+  # Labels and annotation to add to all networkpolicy resources
+  annotations: {}
+  labels: {}
+  
   # List group to create
   rules: []
   # allow from external
@@ -188,6 +193,11 @@ networkpolicy:
 limits: 
   # Enable limitRange default for this project
   enabled: false
+
+  # Labels and annotation to add to all limitRange resources
+  annotations: {}
+  labels: {}
+
   # Specification of the limitRange ressource
   rules: |
     limits:
@@ -209,6 +219,11 @@ limits:
 quotas: 
   # Enable quotas default for this project
   enabled: false
+
+  # Labels and annotation to add to all quotas
+  labels: {}
+  annotations: {}
+
   # Specification of the quotas ressource
   rules: |
     hard:
